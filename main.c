@@ -64,7 +64,7 @@ void setup_signal(int signum, void (*handler)(int)) {
 	sigact.sa_flags = 0;
 	sigact.sa_handler = handler;
 	sigemptyset(&sigact.sa_mask);
-	
+
 	if (sigaction(signum, &sigact, NULL) < 0)
 		error(0, errno, "signal %d", signum);
 }
@@ -165,7 +165,7 @@ int main(int argc, char **argv) {
 
 	while (unauth) {
 		vt_flush(&vt);
-		prompt(vt.ios, "%s's password: ", u->name);
+		prompt(vt.ios, "----- ");
 		unauth = authenticate(u, buf);
 		memset(buf, 0, sizeof(buf));
 		if (unauth) {
@@ -173,9 +173,9 @@ int main(int argc, char **argv) {
 				u = u == &root ? &user : &root;
 				try = 0;
 			}
-			fprintf(vt.ios, "\nAuthentication failed\n\n");
+			fprintf(vt.ios, "\nx\n\n");
 			syslog(LOG_WARNING, "Authentication failure");
-			sleep(AUTH_FAIL_TIMEOUT);
+			usleep(AUTH_FAIL_TIMEOUT);
 		}
 	}
 
